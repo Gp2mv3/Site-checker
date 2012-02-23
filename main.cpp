@@ -17,7 +17,7 @@ string readAddressFile()
       string line;
       while(getline(file, line))
         {
-	  cout << "Checking: " << line << "..." << endl;
+	  cout << "Checking: " << line << "... ";
 	  string online = check(line);
 	  string last = readPage(line);
 
@@ -25,9 +25,9 @@ string readAddressFile()
 	      writePage(line, online);
 
 	  if(last == online)
-	    {
-	      cout << "SAME" << endl;
-	    }
+	    cout << "same" << endl;
+	  else
+	    cout << "DIFFERENT: " << last.compare(online) << endl;
         }
     }
   else
@@ -60,12 +60,11 @@ string readPage(string page)
       string line;
       while(getline(file, line))
         { 
-	  out += line+'\0';
+	  out += line+"\n";
         }
     }
-  else
-      cout << "Warning: page file not found: " << filename << endl;
-  cout << out << endl;
+  //  else
+  //    cout << "Warning: page file not found: " << filename << endl;
   return out;
 }
 
