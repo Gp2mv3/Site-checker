@@ -1,3 +1,8 @@
 #This list of address is jst for test, You can add one site per line and comments are allowed, just begin the line with a #.
-http://www.google.com|gp2mv3@gp2mv3-laptop
-http://www.liveinmusic.com
+# If you want to be mailed when a page isn't the same, just add your address after the | on the line. Like this : 
+http://www.google.com|gp2mv3@localhost
+#The mails are sent with the mail unix's command.
+http://localhost
+
+
+#You can of course add some spaces, the program skip them.

@@ -19,7 +19,7 @@ string readAddressFile()
       while(getline(file, line))
         {
 	  mail = "";
-	  if(line.find("#") != 0)
+	  if(line.find("#") != 0 && line != "")
 	    {
 	      if(line.find("|") != string::npos) //A mail is attached to this page
 		{
