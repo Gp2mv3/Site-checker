@@ -17,25 +17,28 @@ string readAddressFile()
       string line;
       while(getline(file, line))
         {
-	  cout << "Checking: " << line << "... ";
-	  string online = check(line);
-	  string last = readPage(line);
-
-	  if(last == "")
-	      writePage(line, online);
-
-	  if(error == false)
+	  if(line.find("#") != 0)
 	    {
-	      if(last == online)
-		cout << "same" << endl;
-	      else
+	      cout << "Checking: " << line << "... ";
+	      string online = check(line);
+	      string last = readPage(line);
+	      
+	      if(last == "")
+		writePage(line, online);
+	      
+	      if(error == false)
 		{
-		  cout << "DIFF: " << last.compare(online) << endl;
-		  writePage(line, online);
+		  if(last == online)
+		    cout << "same" << endl;
+		  else
+		    {
+		      cout << "DIFF: " << last.compare(online) << endl;
+		      writePage(line, online);
+		    }
 		}
+	      else
+		cout << "ERROR" << endl;
 	    }
-	  else
-	    cout << "ERROR" << endl;
         }
     }
   else
