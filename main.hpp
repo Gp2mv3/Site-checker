@@ -16,5 +16,6 @@ string check(string page);
 string readAddressFile();
 size_t handle_data(void *ptr, size_t size, size_t nmemb, void *stream) ;
 string readPage(string page);
+void writePage(string page, string content);
 
 #endif

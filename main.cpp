@@ -20,7 +20,11 @@ string readAddressFile()
 	  cout << "Checking: " << line << "..." << endl;
 	  string online = check(line);
 	  string last = readPage(line);
-	  if(last.compare(online))
+
+	  if(last == "")
+	      writePage(line, online);
+
+	  if(last == online)
 	    {
 	      cout << "SAME" << endl;
 	    }
@@ -30,6 +34,19 @@ string readAddressFile()
       cout << "ERROR: AddressFile not found: " << ADDR_PATH << endl;
 
   return contents;
+}
+
+void writePage(string page, string content)
+{
+  string filename = PAGES_DIR+"/"+page.substr(7);
+  ofstream file(filename.c_str());
+  
+  if(file)    
+      file << content;
+  else
+      cout << "ERROR: cannot open file: " << filename << endl;
+
+  file.close();
 }
 
 string readPage(string page)
@@ -43,12 +60,12 @@ string readPage(string page)
       string line;
       while(getline(file, line))
         { 
-	  out += line;
+	  out += line+'\0';
         }
     }
   else
       cout << "Warning: page file not found: " << filename << endl;
-
+  cout << out << endl;
   return out;
 }
 
@@ -66,7 +83,7 @@ string check(string page)
       /* always cleanup */ 
       curl_easy_cleanup(curl);
     }
-
+  //  cout << contents << endl;
   return contents;
 }
 
