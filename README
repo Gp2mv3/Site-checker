@@ -1,3 +1,25 @@
-This program is under development, feel free to contribute.
+This is an utility to watch websites, when a page is modified, it can send you an email.
+You can watch every site (I hope).
 
+If you see bugs or error, please open a ticket.
+This program is under development and of course, it's free so feel free to contribute.
+
+
+INSTALL:
 You need libcurl to compile it.
+Install libcurl4-gnutls-dev.
+
+To install Site-checker just type "make" in the directory, an executable will be created (checker).
+
+
+HOW TO USE:
+You must execute ./checker to check the modifications of the watched pages.
+
+The list of the websites you are watching is in address.lst. You must write one address per line and you can add email address like this:
+http://www.google.com|gp2mv3@localhost
+
+This line will watch google.com and if the page change, it will send an email to gp2mv3@localhost.
+
+The emails are sent with the command tool mail in unix so mail must be installed to send emails.
+
+To check the site periodically, you can use cron.
