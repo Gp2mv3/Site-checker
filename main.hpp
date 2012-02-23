@@ -19,4 +19,6 @@ string readPage(string page);
 void writePage(string page, string content);
 string protectString(string str);
 
+void sendMail(string mail, string line);
+
 #endif

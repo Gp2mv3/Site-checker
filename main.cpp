@@ -11,14 +11,22 @@ int main(void)
 string readAddressFile()
 {
   ifstream file(ADDR_PATH.c_str());
+  string mail;
 
   if(file)
     {
       string line;
       while(getline(file, line))
         {
+	  mail = "";
 	  if(line.find("#") != 0)
 	    {
+	      if(line.find("|") != string::npos) //A mail is attached to this page
+		{
+		  mail = line.substr(line.find("|") + 1);
+		  line = line.substr(0, line.find("|"));
+		}
+
 	      cout << "Checking: " << line << "... ";
 	      string online = check(line);
 	      string last = readPage(line);
@@ -33,6 +41,10 @@ string readAddressFile()
 		  else
 		    {
 		      cout << "DIFF: " << last.compare(online) << endl;
+		      
+		      if(mail != "")
+			sendMail(mail, line);
+		     
 		      writePage(line, online);
 		    }
 		}
@@ -135,4 +147,15 @@ string protectString(string str)
       str[i] = '-';
   }
   return str;
+}
+
+
+void sendMail(string mail, string line)
+{
+  string command = "/usr/bin/mail -s '"+line+" has changed !' "+mail;
+  FILE *mailer = popen(command.c_str(), "w");
+  fprintf(mailer, "Hello %s,\n The site you are watching (%s) has just changed.\n", mail.c_str(), line.c_str());
+  pclose(mailer);
+
+  cout << "Email sent to: " << mail << endl;
 }
