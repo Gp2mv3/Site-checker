@@ -24,10 +24,19 @@ string readAddressFile()
 	  if(last == "")
 	      writePage(line, online);
 
-	  if(last == online)
-	    cout << "same" << endl;
+	  //	  cout << online << endl;
+	  if(online.find("ERROR") != 0)
+	    {
+	      if(last == online)
+		cout << "same" << endl;
+	      else
+		{
+		  cout << "DIFF: " << last.compare(online) << endl;
+		  writePage(line, online);
+		}
+	    }
 	  else
-	    cout << "DIFFERENT: " << last.compare(online) << endl;
+	    cout << online << endl;
         }
     }
   else
@@ -38,7 +47,8 @@ string readAddressFile()
 
 void writePage(string page, string content)
 {
-  string filename = PAGES_DIR+"/"+page.substr(7);
+  page = protectString(page.substr(7));
+  string filename = PAGES_DIR+"/"+page;
   ofstream file(filename.c_str());
   
   if(file)    
@@ -51,7 +61,8 @@ void writePage(string page, string content)
 
 string readPage(string page)
 {
-  string filename = PAGES_DIR+"/"+page.substr(7);
+  page = protectString(page.substr(7));
+  string filename = PAGES_DIR+"/"+page;
 
   ifstream file(filename.c_str());
   string out = "";
@@ -75,9 +86,16 @@ string check(string page)
   curl = curl_easy_init();
   if(curl)
     {
+      contents = "";
       curl_easy_setopt(curl, CURLOPT_URL, page.c_str());
       curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,handle_data);
+      curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 30);
+      curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10);
+      curl_easy_setopt(curl, CURLOPT_LOW_SPEED_TIME, 15);
       res = curl_easy_perform(curl);
+
+      if(res != 0)
+	  contents = "ERROR: "+res;
 
       /* always cleanup */ 
       curl_easy_cleanup(curl);
@@ -97,4 +115,14 @@ size_t handle_data(void *ptr, size_t size, size_t nmemb, void *stream)
   *((char *) ptr + numbytes - 1) = lastchar; //Useful ?
 
   return size*nmemb; 
+}
+
+
+string protectString(string str)
+{
+  for (int i = 0; i < str.length(); ++i) {
+    if (str[i] == '.' || str[i] == '/' || str[i] == '?' || str[i] == ':')
+      str[i] = '-';
+  }
+  return str;
 }
