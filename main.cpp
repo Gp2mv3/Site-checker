@@ -24,8 +24,7 @@ string readAddressFile()
 	  if(last == "")
 	      writePage(line, online);
 
-	  //	  cout << online << endl;
-	  if(online.find("ERROR") != 0)
+	  if(error == false)
 	    {
 	      if(last == online)
 		cout << "same" << endl;
@@ -36,7 +35,7 @@ string readAddressFile()
 		}
 	    }
 	  else
-	    cout << online << endl;
+	    cout << "ERROR" << endl;
         }
     }
   else
@@ -83,10 +82,13 @@ string check(string page)
 {
   CURL *curl;
   CURLcode res;
+
+  contents = "";
+  error = false;
+
   curl = curl_easy_init();
   if(curl)
     {
-      contents = "";
       curl_easy_setopt(curl, CURLOPT_URL, page.c_str());
       curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,handle_data);
       curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 30);
@@ -95,11 +97,16 @@ string check(string page)
       res = curl_easy_perform(curl);
 
       if(res != 0)
-	  contents = "ERROR: "+res;
+	{
+	  error = true;
+	  contents = "";
+	}
 
       /* always cleanup */ 
       curl_easy_cleanup(curl);
     }
+  else
+    error = true;
   //  cout << contents << endl;
   return contents;
 }

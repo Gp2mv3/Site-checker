@@ -10,7 +10,7 @@ string ADDR_PATH = "./address.lst";
 string PAGES_DIR = "./pages";
 
 string contents; 
-
+bool error;
 
 string check(string page);
 string readAddressFile();
