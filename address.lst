@@ -4,5 +4,4 @@ http://www.google.com|gp2mv3@localhost
 #The mails are sent with the mail unix's command.
 http://localhost
 
-
 #You can of course add some spaces, the program skip them.

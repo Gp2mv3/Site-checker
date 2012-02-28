@@ -7,6 +7,16 @@ int main(void)
   return 0;
 }
 
+bool diff(int diff, int thresh)
+{
+  if(diff < 0)
+    diff = -diff;
+  
+  if(thresh - diff < 0)
+    return true;
+  else
+    return false;
+}
 
 string readAddressFile()
 {
@@ -16,8 +26,10 @@ string readAddressFile()
   if(file)
     {
       string line;
+      int threshold;
       while(getline(file, line))
         {
+	  threshold = 0;
 	  mail = "";
 	  if(line.find("#") != 0 && line != "")
 	    {
@@ -25,6 +37,15 @@ string readAddressFile()
 		{
 		  mail = line.substr(line.find("|") + 1);
 		  line = line.substr(0, line.find("|"));
+		}
+
+	      if(line.find("%error=") != string::npos) //A threshold is attached to this page
+		{
+		  string errTxt = line.substr(line.find("%error=") + 7);
+		  line = line.substr(0, line.find("%error="));
+		  
+		  std::istringstream iss(errTxt);
+		  iss >> threshold;
 		}
 
 	      cout << "Checking: " << line << "... ";
@@ -40,11 +61,15 @@ string readAddressFile()
 		    cout << "same" << endl;
 		  else
 		    {
-		      cout << "DIFF: " << last.compare(online) << endl;
-		      
-		      if(mail != "")
-			sendMail(mail, line);
-		     
+		      if(diff(last.compare(online), threshold))
+			{
+			  cout << "DIFF: " << last.compare(online) << endl;  
+			  if(mail != "")
+			    sendMail(mail, line);
+			}
+		      else
+			cout << "just a bit different." << endl;
+
 		      writePage(line, online);
 		    }
 		}

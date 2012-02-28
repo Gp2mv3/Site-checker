@@ -3,11 +3,13 @@
 #include <iostream>
 #include <curl/curl.h>
 #include <fstream>
+#include <sstream>
 
 using namespace std; 
 
 string ADDR_PATH = "./address.lst";
 string PAGES_DIR = "./pages";
+int THRESHOLD = 15;
 
 string contents; 
 bool error;
